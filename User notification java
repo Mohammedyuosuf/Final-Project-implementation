@@ -1,0 +1,67 @@
+package com.example.yousuf_blooddonationapp.manager;
+
+import com.google.firebase.database.Exclude;
+
+public class UserNoti {
+    public String notiName;
+    public String notiMessage;
+    public String notiGroup;
+    public String notiBotle;
+
+    public String mKey;
+
+    public UserNoti() {
+    }
+
+    public UserNoti(String notiName, String notiMessage, String notiGroup, String notiBotle) {
+        this.notiName = notiName;
+        this.notiMessage = notiMessage;
+        this.notiGroup = notiGroup;
+        this.notiBotle = notiBotle;
+    }
+
+    public String getNotiName() {
+        return notiName;
+    }
+
+    public void setNotiName(String notiName) {
+        this.notiName = notiName;
+    }
+
+    public String getNotiMessage() {
+        return notiMessage;
+    }
+
+    public void setNotiMessage(String notiMessage) {
+        this.notiMessage = notiMessage;
+    }
+
+    public String getNotiGroup() {
+        return notiGroup;
+    }
+
+    public void setNotiGroup(String notiGroup) {
+        this.notiGroup = notiGroup;
+    }
+
+    public String getNotiBotle() {
+        return notiBotle;
+    }
+
+    public void setNotiBotle(String notiBotle) {
+        this.notiBotle = notiBotle;
+    }
+
+
+
+
+
+    @Exclude
+    public String getKey() {
+        return mKey;
+    }
+    @Exclude
+    public void setKey(String Key) {
+        mKey = Key;
+    }
+}
