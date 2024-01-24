@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/booking_name2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Donor Name: "
+            android:textColor="@color/red"
+            android:textSize="18sp">
+
+        </TextView>
+        <TextView
+            android:id="@+id/booking_age2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Donor Age: "
+            android:textColor="@color/red"
+            android:textSize="18sp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/booking_botle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Number of Blood Bottles: "
+            android:textColor="@color/red"
+            android:textSize="18sp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/booking_date2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Appointment Date: "
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/red"
+            android:textSize="18sp">
+        </TextView>
+        <TextView
+            android:id="@+id/booking_time2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Appointment Time "
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/red"
+            android:textSize="18sp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/booking_group2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Donor Blood Group "
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/red"
+            android:textSize="18sp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/booking_status2"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:background="@drawable/edittext"
+            android:text="Donation Status: "
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="@color/red"
+            android:textSize="18sp">
+        </TextView>
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
