@@ -1,0 +1,93 @@
+package com.example.yousuf_blooddonationapp.donor;
+
+import com.google.firebase.database.Exclude;
+
+public class UserHistory {
+    public String appName;
+    public String appAge;
+    public String appBotle;
+    public String appTime;
+    public String appDate;
+    public String appStatus;
+
+    public String appGroup;
+    public String mKey;
+
+    public UserHistory() {
+    }
+
+    public UserHistory(String appName, String appAge, String appBotle, String appTime, String appDate, String appStatus, String appGroup) {
+        this.appName = appName;
+        this.appAge = appAge;
+        this.appBotle = appBotle;
+        this.appTime = appTime;
+        this.appDate = appDate;
+        this.appStatus = appStatus;
+        this.appGroup = appGroup;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
+    }
+
+    public String getAppAge() {
+        return appAge;
+    }
+
+    public void setAppAge(String appAge) {
+        this.appAge = appAge;
+    }
+
+    public String getAppBotle() {
+        return appBotle;
+    }
+
+    public void setAppBotle(String appBotle) {
+        this.appBotle = appBotle;
+    }
+
+    public String getAppTime() {
+        return appTime;
+    }
+
+    public void setAppTime(String appTime) {
+        this.appTime = appTime;
+    }
+
+    public String getAppDate() {
+        return appDate;
+    }
+
+    public void setAppDate(String appDate) {
+        this.appDate = appDate;
+    }
+
+    public String getAppStatus() {
+        return appStatus;
+    }
+
+    public void setAppStatus(String appStatus) {
+        this.appStatus = appStatus;
+    }
+
+    public String getAppGroup() {
+        return appGroup;
+    }
+
+    public void setAppGroup(String appGroup) {
+        this.appGroup = appGroup;
+    }
+
+    @Exclude
+    public String getKey() {
+        return mKey;
+    }
+    @Exclude
+    public void setKey(String Key) {
+        mKey = Key;
+    }
+}
