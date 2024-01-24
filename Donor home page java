@@ -1,0 +1,321 @@
+package com.example.yousuf_blooddonationapp.donor;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.yousuf_blooddonationapp.CheckUser;
+import com.example.yousuf_blooddonationapp.R;
+import com.example.yousuf_blooddonationapp.UserInformation;
+import com.example.yousuf_blooddonationapp.manager.DeleteNotification;
+import com.example.yousuf_blooddonationapp.manager.UserNoti;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+public class DonorHomePage extends AppCompatActivity {
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+    Toolbar toolbar;
+    FirebaseAuth firebaseAuth;
+
+    Button add_a, view_a, donation_status, add_feedback, view_history, check_noti, view_profile, delete_account, logout_d;
+
+    public static final String SHARED_PREFS= "sharedPrefs";
+    FirebaseUser user;
+    ImageView donor_blink;
+
+
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_donor_home_page);
+
+        drawerLayout= findViewById(R.id.drawerlayout);
+        navigationView= findViewById(R.id.navigationview);
+        toolbar= findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        firebaseAuth= FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+
+        FirebaseMessaging.getInstance().subscribeToTopic("notifications");
+
+        add_a= findViewById(R.id.add_a);
+        view_a= findViewById(R.id.view_a);
+        donation_status= findViewById(R.id.donation_status);
+        add_feedback = findViewById(R.id.add_feedback);
+        view_history= findViewById(R.id.view_history);
+        check_noti= findViewById(R.id.check_noti);
+        view_profile= findViewById(R.id.view_profile);
+        delete_account= findViewById(R.id.delete_account);
+        logout_d= findViewById(R.id.logout_d);
+        donor_blink= findViewById(R.id.donor_blink);
+
+        //donor_blink.setEnabled(false);
+        donor_blink.setVisibility(View.INVISIBLE);
+        Animation animation = AnimationUtils.loadAnimation(DonorHomePage.this, R.anim.blink);
+
+
+
+        //to access header to display user name
+        View headerView = navigationView.getHeaderView(0);
+        TextView navUsername = (TextView) headerView.findViewById(R.id.name);
+        //dislay name end of header
+
+
+        //blink code
+        DatabaseReference refe= FirebaseDatabase.getInstance().getReference("Notifications");
+        refe.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot ds: postSnapshot.child("Requests").getChildren()){
+                        if (ds.exists()){
+                            donor_blink.setVisibility(View.VISIBLE);
+                            donor_blink.startAnimation(animation);
+                        }
+                        if (!ds.exists()){
+                            donor_blink.setVisibility(View.INVISIBLE);   }
+
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        //blink code end
+
+
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users").child("Donor").child(user.getUid()).child("Profile");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                UserInformation userInformation= dataSnapshot.getValue(UserInformation.class);
+                navUsername.setText(userInformation.getUserName());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(DonorHomePage.this, databaseError.getCode(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        ActionBarDrawerToggle toggle= new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.navigation_open, R.string.navigation_close);
+
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id= item.getItemId();
+
+                if (id == R.id.home_menu) {
+                    startActivity(new Intent(DonorHomePage.this, DonorHomePage.class));
+                    finish();
+
+                } else if (id == R.id.add_menu) {
+                    startActivity(new Intent(DonorHomePage.this, AddApointment.class));
+                    finish();
+
+                } else if (id == R.id.status_menu) {
+                    startActivity(new Intent(DonorHomePage.this, DonationStatus.class));
+                    finish();
+
+                } else if (id == R.id.view_history_menu) {
+                    startActivity(new Intent(DonorHomePage.this, ViewHistory.class));
+                    finish();
+
+                } else if (id == R.id.view_ap_menu) {
+                    startActivity(new Intent(DonorHomePage.this, ViewAppointment.class));
+                    finish();
+
+                } else if (id == R.id.check_noti_menu) {
+                    startActivity(new Intent(DonorHomePage.this, CheckNotification.class));
+                    finish();
+
+                } else if (id == R.id.add_feedback_menu) {
+                    startActivity(new Intent(DonorHomePage.this, AddFeedback.class));
+                    finish();
+
+                } else if (id == R.id.update_ap_menu) {
+                    startActivity(new Intent(DonorHomePage.this, ViewAppointment.class));
+                    finish();
+
+                } else if (id == R.id.delete_ap_menu) {
+                    startActivity(new Intent(DonorHomePage.this, ViewAppointment.class));
+                    finish();
+
+                } else if (id == R.id.password_menu) {
+                    startActivity(new Intent(DonorHomePage.this, ForgetPassword.class));
+                    finish();
+
+                } else if (id == R.id.delete_menu) {
+                    startActivity(new Intent(DonorHomePage.this, DonorDeleteAccount.class));
+                    finish();
+
+                } else if (id == R.id.view_menu) {
+                    startActivity(new Intent(DonorHomePage.this, DonorViewProfile.class));
+                    finish();
+
+                } else if (id == R.id.edit_menu) {
+                    startActivity(new Intent(DonorHomePage.this, DonorUpdateProfile.class));
+                    finish();
+
+                }  else if (id == R.id.logout_menu) {
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                    SharedPreferences.Editor editor= sharedPreferences.edit();
+                    editor.clear();
+                    editor.commit();
+                    firebaseAuth.signOut();
+                    finish();
+                    Toast.makeText(DonorHomePage.this, "Account Logout", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(DonorHomePage.this, CheckUser.class));
+                }
+                return false;
+            }
+        });
+
+        add_a.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DonorHomePage.this, AddApointment.class));
+                finish();
+            }
+        });
+
+        view_a.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DonorHomePage.this, ViewAppointment.class));
+                finish();
+            }
+        });
+
+        donation_status.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DonorHomePage.this, DonationStatus.class));
+                finish();
+            }
+        });
+
+        add_feedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DonorHomePage.this, AddFeedback.class));
+                finish();
+            }
+        });
+
+        view_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DonorHomePage.this, ViewHistory.class));
+                finish();
+            }
+        });
+
+        check_noti.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DonorHomePage.this, CheckNotification.class));
+                finish();
+            }
+        });
+
+        view_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DonorHomePage.this, DonorViewProfile.class));
+                finish();
+            }
+        });
+
+        delete_account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(DonorHomePage.this, DonorDeleteAccount.class));
+                finish();
+            }
+        });
+
+
+        logout_d.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                SharedPreferences.Editor editor= sharedPreferences.edit();
+                editor.clear();
+                editor.commit();
+                firebaseAuth.signOut();
+                finish();
+                Toast.makeText(DonorHomePage.this, "Account Logout", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(DonorHomePage.this, CheckUser.class));
+            }
+        });
+
+        //button clicklistener
+    }
+
+    @Override
+    public void onBackPressed() {
+        backButtonHandler();
+    }
+
+    public void backButtonHandler() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                DonorHomePage.this);
+        // Setting Dialog Title
+        alertDialog.setTitle("Leave application?");
+        // Setting Dialog Message
+        alertDialog.setMessage("Are you sure you want to leave the application?");
+        // Setting Icon to Dialog
+        alertDialog.setIcon(R.drawable.logo);
+        // Setting Positive "Yes" Button
+        alertDialog.setPositiveButton("Exit",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        // Setting Negative "NO" Button
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke NO event
+                        dialog.cancel();
+                    }
+                });
+        // Showing Alert Message
+        alertDialog.show();
+    }
+}
