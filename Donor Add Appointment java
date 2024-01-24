@@ -1,0 +1,168 @@
+package com.example.yousuf_blooddonationapp.donor;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.example.yousuf_blooddonationapp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Calendar;
+
+public class AddApointment extends AppCompatActivity {
+    EditText d_name, d_age, d_botle, d_group;
+    Button confirm_ap, mDatebtn, mTimebtn;
+    FirebaseAuth firebaseAuth;
+    String timeTonotify;
+    FirebaseUser user;
+    String date ,time ,u_s_name, u_s_age, u_s_botle, u_s_group;
+
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_apointment);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+
+        d_name= (EditText) findViewById(R.id.d_name);
+        d_age= (EditText) findViewById(R.id.d_age);
+        d_botle= (EditText) findViewById(R.id.d_botle);
+        d_group= (EditText) findViewById(R.id.d_group);
+        mDatebtn = (Button) findViewById(R.id.btnDate);                                             //assigned all the material reference to get and set data
+        mTimebtn = (Button) findViewById(R.id.btnTime);
+        confirm_ap= (Button) findViewById(R.id.confirm_ap);
+
+        mTimebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectTime();                                                                       //when we click on the choose time button it calls the select time method
+            }
+        });
+        mDatebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectDate();
+            }
+        });
+
+        confirm_ap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (validate1()){
+                if (validate()) {
+                    if (user != null) {
+                        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Appointments").child(user.getUid()).child("own");
+                        UserAppointment userAppointment = new UserAppointment(u_s_name, u_s_age, u_s_botle, time, date, u_s_group);
+                        ref.child(ref.push().getKey()).setValue(userAppointment);
+                        Toast.makeText(AddApointment.this, "Appointment Booked Successfully", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(AddApointment.this, DonorHomePage.class));
+                        finish();
+                    }
+
+                }
+            }
+            }
+        });
+
+    }
+
+    private Boolean validate1(){
+        boolean result= false;
+
+        u_s_name= d_name.getText().toString();
+        u_s_age= d_age.getText().toString();
+        u_s_botle= d_botle.getText().toString();
+        u_s_group= d_group.getText().toString();
+        if (u_s_name.isEmpty() || u_s_age.isEmpty() || u_s_botle.isEmpty() || u_s_group.isEmpty()) {                                               //shows toast if date and time are not selected
+            Toast.makeText(getApplicationContext(), "Please enter all details", Toast.LENGTH_SHORT).show();
+        }else {
+            result= true;
+        }
+        return result;
+    }
+    private Boolean validate(){
+        boolean result= false;
+
+        date = mDatebtn.getText().toString().trim();                                 //access the date from the choose date button
+        time = mTimebtn.getText().toString().trim();
+        if (time.equals("Select time") || date.equals("Select date")) {                                               //shows toast if date and time are not selected
+            Toast.makeText(getApplicationContext(), "Please select date and time both", Toast.LENGTH_SHORT).show();
+        }else {
+            result= true;
+        }
+        return result;
+    }
+
+
+    private void selectTime() {                                                                     //this method performs the time picker task
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                timeTonotify = i + ":" + i1;                                                        //temp variable to store the time to set alarm
+                mTimebtn.setText(FormatTime(i, i1));                                                //sets the button text as selected time
+            }
+        }, hour, minute, false);
+        timePickerDialog.show();
+    }
+    private void selectDate() {                                                                     //this method performs the date picker task
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                mDatebtn.setText(day + "-" + (month + 1) + "-" + year);                             //sets the selected date as test for button
+            }
+        }, year, month, day);
+        datePickerDialog.show();
+    }
+    public String FormatTime(int hour, int minute) {                                                //this method converts the time into 12hr format and assigns am or pm
+        String time;
+        time = "";
+        String formattedMinute;
+        if (minute / 10 == 0) {
+            formattedMinute = "0" + minute;
+        } else {
+            formattedMinute = "" + minute;
+        }
+        if (hour == 0) {
+            time = "12" + ":" + formattedMinute + " AM";
+        } else if (hour < 12) {
+            time = hour + ":" + formattedMinute + " AM";
+        } else if (hour == 12) {
+            time = "12" + ":" + formattedMinute + " PM";
+        } else {
+            int temp = hour - 12;
+            time = temp + ":" + formattedMinute + " PM";
+        }
+        return time;
+    }
+
+    //date time code end
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(AddApointment.this, DonorHomePage.class));
+        finish();
+    }
+}
