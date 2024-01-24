@@ -1,0 +1,76 @@
+package com.example.yousuf_blooddonationapp.donor;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.yousuf_blooddonationapp.R;
+import com.example.yousuf_blooddonationapp.manager.ImageAdapterDeleteNoti;
+import com.example.yousuf_blooddonationapp.manager.UserNoti;
+
+import java.util.List;
+
+public class ImageAdapterCheckNotification extends RecyclerView.Adapter <ImageAdapterCheckNotification.ImageViewHolder>{
+    private Context mContext;
+    private List<UserNoti> mUploads;
+
+    public ImageAdapterCheckNotification(Context context, List<UserNoti> userUploads){
+        mContext= context;
+        mUploads= userUploads;
+    }
+    @NonNull
+    @Override
+    public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v= LayoutInflater.from(mContext).inflate(R.layout.image_item_check_notification, parent, false);
+        return new ImageViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ImageAdapterCheckNotification.ImageViewHolder holder, int position) {
+        UserNoti uploadCurrent= mUploads.get(position);
+        holder.textViewTitle.setText("Title: "+uploadCurrent.getNotiName());
+        holder.textViewMsg.setText("Request: "+uploadCurrent.getNotiMessage());
+        holder.textViewBotle.setText("Required Bottles of blood: "+uploadCurrent.getNotiBotle());
+        holder.textViewGroup.setText("Required Blood Group: "+uploadCurrent.getNotiGroup());
+
+        Animation animation= AnimationUtils.loadAnimation(mContext.getApplicationContext(), R.anim.blink);
+        holder.image.startAnimation(animation);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mUploads.size();
+    }
+
+    public class ImageViewHolder extends RecyclerView.ViewHolder {
+        public TextView textViewTitle;
+        public TextView textViewMsg;
+        public TextView textViewBotle;
+        public TextView textViewGroup;
+
+        public ImageView image;
+
+        public ImageViewHolder(@NonNull View itemView) {
+            super(itemView);
+            textViewTitle= itemView.findViewById(R.id.v_noti_title1);
+            textViewMsg= itemView.findViewById(R.id.v_noti_msg1);
+            textViewBotle= itemView.findViewById(R.id.v_noti_botle1);
+            textViewGroup= itemView.findViewById(R.id.v_noti_group1);
+            image= itemView.findViewById(R.id.v_noti_pic1);
+
+        }
+
+
+    }
+
+
+}
