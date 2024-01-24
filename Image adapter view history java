@@ -1,0 +1,62 @@
+package com.example.yousuf_blooddonationapp.donor;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.yousuf_blooddonationapp.R;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+
+public class ImageAdapterViewHistory extends FirebaseRecyclerAdapter<UserHistory, ImageAdapterViewHistory.ImageViewHolder> {
+
+    public ImageAdapterViewHistory(@NonNull FirebaseRecyclerOptions<UserHistory> options) {
+        super(options);
+    }
+    @Override
+    protected void onBindViewHolder(@NonNull ImageAdapterViewHistory.ImageViewHolder holder, int position, @NonNull UserHistory model) {
+        holder.textViewName.setText("Donor Name: "+model.getAppName());
+        holder.textViewAge.setText("Donor Age: "+model.getAppAge());
+        holder.textViewBotle.setText("Quantity of blood bottles: "+model.getAppBotle());
+        holder.textViewTime.setText("Appointment Time: "+model.getAppTime());
+        holder.textViewDate.setText("Appointment Date: "+model.getAppDate());
+        holder.textViewGroup.setText("Donor Blood Group: "+model.getAppGroup());
+        holder.textViewStatus.setText("Donation Status: Donation Done");
+
+    }
+
+    @NonNull
+    @Override
+    public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.image_item_view_history, parent, false);
+        return new ImageViewHolder(v);
+    }
+
+
+    public class ImageViewHolder extends RecyclerView.ViewHolder{
+        public TextView textViewName;
+        public TextView textViewAge;
+        public TextView textViewBotle;
+        public TextView textViewDate;
+        public TextView textViewTime;
+        public TextView textViewStatus;
+        public TextView textViewGroup;
+
+        public ImageViewHolder(@NonNull View itemView) {
+            super(itemView);
+            textViewName= itemView.findViewById(R.id.booking_name2);
+            textViewAge= itemView.findViewById(R.id.booking_age2);
+            textViewBotle= itemView.findViewById(R.id.booking_botle2);
+            textViewDate= itemView.findViewById(R.id.booking_date2);
+            textViewTime= itemView.findViewById(R.id.booking_time2);
+            textViewStatus= itemView.findViewById(R.id.booking_status2);
+            textViewGroup= itemView.findViewById(R.id.booking_group2);
+        }
+    }
+
+}
