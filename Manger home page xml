@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".donor.DonorHomePage"
+    android:id="@+id/drawerlayout1"
+    android:background="@color/background1"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar1"
+            android:background="@color/red"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            android:title="Toolbars"
+            android:titleTextColor="#ffffff"
+            android:titleMarginStart="10dp"
+            android:layout_marginBottom="5dp"
+            tools:ignore="MissingConstraints"/>
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="418dp"
+            android:layout_height="172dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.12"
+            app:srcCompat="@drawable/logo" />
+
+
+        <Button
+            android:id="@+id/m_view_ap"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:background="@drawable/btn"
+            android:drawableLeft="@drawable/baseline_preview_24_white"
+            android:fontFamily="@font/aclonica"
+            android:paddingLeft="10dp"
+            android:text="View Appointments"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.524"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.369" />
+
+        <Button
+            android:id="@+id/send_noti"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:background="@drawable/btn"
+            android:drawableLeft="@drawable/baseline_notification_add_24_white"
+            android:fontFamily="@font/aclonica"
+            android:paddingLeft="10dp"
+            android:text="Send Donation Request and Notification"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.524"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.455" />
+
+        <Button
+            android:id="@+id/delete_noti"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:background="@drawable/btn"
+            android:drawableLeft="@drawable/baseline_delete_24_white"
+            android:fontFamily="@font/aclonica"
+            android:paddingLeft="10dp"
+            android:text="Delete Donation Request"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.541" />
+
+        <Button
+            android:id="@+id/view_storage"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:background="@drawable/btn"
+            android:drawableLeft="@drawable/baseline_bloodtype_24_white"
+            android:fontFamily="@font/aclonica"
+            android:paddingLeft="10dp"
+            android:text="View Blood bank storage"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.628" />
+
+        <Button
+            android:id="@+id/view_feedback"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:background="@drawable/btn"
+            android:drawableLeft="@drawable/baseline_feedback_24"
+            android:fontFamily="@font/aclonica"
+            android:paddingLeft="10dp"
+            android:text="View Feedback"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.524"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.715" />
+
+        <Button
+            android:id="@+id/m_view_profile"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:background="@drawable/btn"
+            android:drawableLeft="@drawable/baseline_preview_24_white"
+            android:fontFamily="@font/aclonica"
+            android:paddingLeft="10dp"
+            android:text="View Profile"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.524"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.801" />
+
+        <Button
+            android:id="@+id/m_delete_account"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:background="@drawable/btn"
+            android:drawableLeft="@drawable/baseline_delete_24_white"
+            android:fontFamily="@font/aclonica"
+            android:paddingLeft="10dp"
+            android:text="Delete Account"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.524"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.889" />
+
+        <Button
+            android:id="@+id/m_logout_d"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:background="@drawable/btn"
+            android:drawableLeft="@drawable/baseline_logout_24_white"
+            android:fontFamily="@font/aclonica"
+            android:paddingLeft="10dp"
+            android:text="Logout"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.976" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/navigationview1"
+        app:headerLayout="@layout/headerfile1"
+        app:menu="@menu/sidemenu1"
+        android:layout_gravity="start"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>
