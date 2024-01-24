@@ -1,0 +1,156 @@
+package com.example.yousuf_blooddonationapp.manager;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.yousuf_blooddonationapp.R;
+import com.example.yousuf_blooddonationapp.donor.DonorHomePage;
+import com.example.yousuf_blooddonationapp.donor.ImageAdapterViewOwnAppointments;
+import com.example.yousuf_blooddonationapp.donor.UserAppointment;
+import com.example.yousuf_blooddonationapp.donor.ViewAppointment;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class DeleteNotification extends AppCompatActivity implements ImageAdapterDeleteNoti.OnItemClickListener{
+
+    private RecyclerView mRecyclerView;
+    private ImageAdapterDeleteNoti mAdapter;
+    private DatabaseReference mDatabaseRef, ref1;
+    private FirebaseAuth firebaseAuth;
+    private ValueEventListener mDBListener;
+    private FirebaseUser user;
+    private List<UserNoti> mUploads;
+    private ProgressBar mProgressCircle;
+    TextView txt_toast;
+
+    String selectedKey;
+    String key;
+
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_delete_notification);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_v);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mProgressCircle = (ProgressBar) findViewById(R.id.progress_circle_v);
+
+        mUploads = new ArrayList<>();
+        mAdapter = new ImageAdapterDeleteNoti(DeleteNotification.this, mUploads);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(DeleteNotification.this);
+
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Notifications").child(user.getUid()).child("Requests");
+        mDBListener = mDatabaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    mUploads.clear();
+                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                        UserNoti userupload= postSnapshot.getValue(UserNoti.class);
+                        userupload.setKey(postSnapshot.getKey());
+                        mUploads.add(userupload);
+
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(DeleteNotification.this);
+                        layoutManager.setReverseLayout(true);
+                        layoutManager.setStackFromEnd(true);
+                        mRecyclerView.setLayoutManager(layoutManager);
+                    }
+                    mAdapter.notifyDataSetChanged();
+                    mProgressCircle.setVisibility(View.INVISIBLE);
+                }
+                if (!snapshot.exists()){
+                    Toast.makeText(DeleteNotification.this, "There is no request yet!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(DeleteNotification.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                mProgressCircle.setVisibility(View.INVISIBLE);
+            }
+
+        });
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        UserNoti selectedItem = mUploads.get(position);
+        selectedKey = selectedItem.getKey();
+        deleteNotiFunction();
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDatabaseRef.removeEventListener(mDBListener);
+    }
+
+    public void deleteNotiFunction() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                DeleteNotification.this);
+        // Setting Dialog Title
+        alertDialog.setTitle("Delete Assignment");
+        // Setting Dialog Message
+        alertDialog.setMessage("Are you sure you want to Cancel the appointment?");
+        // Setting Icon to Dialog
+        alertDialog.setIcon(R.drawable.logo);
+        // Setting Positive "Yes" Button
+        alertDialog.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        ref1 = FirebaseDatabase.getInstance().getReference("Notifications").child(user.getUid()).child("Requests").child(selectedKey);
+                        ref1.getRef().removeValue();
+                        startActivity(new Intent(DeleteNotification.this, ViewAppointment.class));
+                        Toast.makeText(DeleteNotification.this, "Request is Deleted", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
+        // Setting Negative "NO" Button
+        alertDialog.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to invoke NO event
+                        dialog.cancel();
+                    }
+                });
+        // Showing Alert Message
+        alertDialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(DeleteNotification.this, ManagerHomePage.class));
+        finish();
+
+    }
+}
