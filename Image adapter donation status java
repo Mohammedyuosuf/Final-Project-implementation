@@ -1,0 +1,91 @@
+package com.example.yousuf_blooddonationapp.donor;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.yousuf_blooddonationapp.R;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+
+public class ImageAdapterDonationStatus extends FirebaseRecyclerAdapter<UserAppointment, ImageAdapterDonationStatus.ImageViewHolder> {
+    private OnItemClickListener mListener;
+
+    public ImageAdapterDonationStatus(@NonNull FirebaseRecyclerOptions<UserAppointment> options) {
+        super(options);
+    }
+    @Override
+    protected void onBindViewHolder(@NonNull ImageAdapterDonationStatus.ImageViewHolder holder, int position, @NonNull UserAppointment model) {
+        holder.textViewName.setText("Donor Name: "+model.getAppName());
+        holder.textViewAge.setText("Donor Age: "+model.getAppAge());
+        holder.textViewBotle.setText("Quantity of blood bottles: "+model.getAppBotle());
+        holder.textViewTime.setText("Appointment Time: "+model.getAppTime());
+        holder.textViewDate.setText("Appointment Date: "+model.getAppDate());
+        holder.textViewGroup.setText("Donor Blood Group: "+model.getAppGroup());
+        holder.textViewStatus.setText("Donation Status: Pending");
+
+    }
+
+    @NonNull
+    @Override
+    public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.image_item_donation_status, parent, false);
+        return new ImageViewHolder(v);
+    }
+
+
+    public class ImageViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        public TextView textViewName;
+        public TextView textViewAge;
+        public TextView textViewBotle;
+        public TextView textViewDate;
+        public TextView textViewTime;
+        public TextView textViewStatus;
+        public TextView textViewGroup;
+        public Button btn_complete;
+
+
+
+        public ImageViewHolder(@NonNull View itemView) {
+            super(itemView);
+            textViewName= itemView.findViewById(R.id.booking_name1);
+            textViewAge= itemView.findViewById(R.id.booking_age1);
+            textViewBotle= itemView.findViewById(R.id.booking_botle1);
+            textViewDate= itemView.findViewById(R.id.booking_date1);
+            textViewTime= itemView.findViewById(R.id.booking_time1);
+            textViewStatus= itemView.findViewById(R.id.booking_status1);
+            textViewGroup= itemView.findViewById(R.id.booking_group1);
+            btn_complete= itemView.findViewById(R.id.btn_complete);
+
+
+            btn_complete.setOnClickListener(this);
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mListener != null) {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    mListener.onItemClick(position);
+                }
+            }
+        }
+
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mListener= listener;
+    }
+
+
+}
