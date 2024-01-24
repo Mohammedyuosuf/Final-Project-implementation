@@ -1,0 +1,51 @@
+package com.example.yousuf_blooddonationapp.manager;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.yousuf_blooddonationapp.R;
+import com.example.yousuf_blooddonationapp.donor.ImageAdapterViewHistory;
+import com.example.yousuf_blooddonationapp.donor.UserFeedback;
+import com.example.yousuf_blooddonationapp.donor.UserHistory;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+
+public class ImageAdapterViewFeedback extends FirebaseRecyclerAdapter<UserFeedback, ImageAdapterViewFeedback.ImageViewHolder> {
+
+    public ImageAdapterViewFeedback(@NonNull FirebaseRecyclerOptions<UserFeedback> options) {
+        super(options);
+    }
+    @Override
+    protected void onBindViewHolder(@NonNull ImageAdapterViewFeedback.ImageViewHolder holder, int position, @NonNull UserFeedback model) {
+        holder.textFeedName.setText("UserName: "+model.getFeedName());
+        holder.textFeedRating.setText("Rating: "+model.getFeedRating());
+        holder.textFeedComment.setText("Comment: "+model.getFeedComment());
+
+    }
+
+    @NonNull
+    @Override
+    public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.image_item_view_feedback, parent, false);
+        return new ImageViewHolder(v);
+    }
+
+
+    public class ImageViewHolder extends RecyclerView.ViewHolder{
+        public TextView textFeedName;
+        public TextView textFeedRating;
+        public TextView textFeedComment;
+
+        public ImageViewHolder(@NonNull View itemView) {
+            super(itemView);
+            textFeedName= itemView.findViewById(R.id.f_ser_name);
+            textFeedRating= itemView.findViewById(R.id.f_ser_rating);
+            textFeedComment= itemView.findViewById(R.id.f_ser_comment);
+        }
+    }
+}
